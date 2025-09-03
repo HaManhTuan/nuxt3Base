@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  nuxt-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3000"
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+      - RESEND_API_KEY=${RESEND_API_KEY}
+    env_file:
+      - .env
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          ignore:
+            - node_modules/
+            - .git/
+            - .nuxt/
+            - .output/
+    networks:
+      - nuxt-network
+
+networks:
+  nuxt-network:
+    driver: bridge
